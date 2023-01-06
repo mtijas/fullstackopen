@@ -1,0 +1,20 @@
+title FSO 0.6
+
+note over Browser:
+User inputs text to the *note* field
+and clicks Send.
+end note
+
+note over Browser:
+Broser appends the note to the list of notes,
+empties the input field, redraws notes list
+and sends the POST request.
+end note
+
+Browser->Server: HTTP POST https://studies.cs.helsinki.fi/exampleapp/new_note_spa \n with user input
+
+note over Server:
+Server saves the new note
+end note
+
+Server->Browser: Response 201 with JSON {"message":"note created"}

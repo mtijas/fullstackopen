@@ -1,0 +1,44 @@
+title FSO 0.4
+
+note over Browser:
+User inputs text to the *note* field
+and clicks Send.
+end note
+
+Browser->Server: HTTP POST https://studies.cs.helsinki.fi/exampleapp/new_note \n with user input
+
+note over Server:
+Server saves the new note
+end note
+
+Server->Browser: Response 302, location: /exampleapp/notes
+
+Browser->Server: HTTP GET https://studies.cs.helsinki.fi/exampleapp/notes
+
+note over Server:
+Server builds the HTML page
+end note
+
+Server -> Browser: Response 200 with HTML code
+
+note over Browser:
+Browser starts to render
+and continues with rest of the GETs.
+end note
+
+Browser->Server: HTTP GET https://studies.cs.helsinki.fi/exampleapp/main.css
+Server -> Browser: Response 200 with main.css
+
+Browser->Server: HTTP GET https://studies.cs.helsinki.fi/exampleapp/main.js
+Server -> Browser: Response 200 with main.js
+
+Browser->Server: HTTP GET https://studies.cs.helsinki.fi/exampleapp/data.json
+Server -> Browser: Response 200 with JSON data containing recent notes
+
+Browser->Server: HTTP GET https://studies.cs.helsinki.fi/favicon.ico
+Server -> Browser: Response 200 with HTML page containing link to /stats
+
+note left of Server:
+Responding with HTML page for favicon request
+is an interesting design choice :)
+end note
