@@ -1,13 +1,16 @@
-const PersonRow = ({ person }) => {
+const PersonRow = ({ person, deleteHandler }) => {
   return (
     <tr>
       <td>{person.name}</td>
       <td>{person.number}</td>
+      <td>
+        <button onClick={deleteHandler}>Delete</button>
+      </td>
     </tr>
-  )
-}
+  );
+};
 
-const PersonsTable = ({ persons }) => {
+const PersonsTable = ({ persons, deletePerson }) => {
   return (
     <table>
       <thead>
@@ -17,10 +20,24 @@ const PersonsTable = ({ persons }) => {
         </tr>
       </thead>
       <tbody>
-        {persons.map(person => <PersonRow key={person.id} person={person} />)}
+        {persons.map((person) => {
+          return (
+            <PersonRow
+              key={person.id}
+              person={person}
+              deleteHandler={() => {
+                if (
+                  window.confirm(`Do you really want to delete ${person.name}`)
+                ) {
+                  deletePerson(person.id);
+                }
+              }}
+            />
+          );
+        })}
       </tbody>
     </table>
-  )
-}
+  );
+};
 
-export default PersonsTable
+export default PersonsTable;
