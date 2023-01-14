@@ -1,0 +1,13 @@
+GET https://mti-fso-part3-phonebook.fly.dev/api/persons/
+
+###
+POST https://mti-fso-part3-phonebook.fly.dev/api/persons/ HTTP/1.1
+content-type: application/json
+
+{
+    "name": "test user 2",
+    "number": "42"
+}
+
+###
+DELETE https://mti-fso-part3-phonebook.fly.dev/api/persons/4
