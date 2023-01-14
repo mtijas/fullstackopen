@@ -1,7 +1,5 @@
+fly.toml
 Dockerfile
 .dockerignore
 node_modules
 .git
-.env
-docker-compose.yaml
-requests
