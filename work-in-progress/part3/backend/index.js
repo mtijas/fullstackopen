@@ -9,8 +9,6 @@ app.use(cors());
 app.use(express.static("build"));
 app.use(express.json());
 
-let notes = [];
-
 app.get("/", (request, response) => {
   response.send("<h1>Hello world!</h1>");
 });
@@ -35,7 +33,7 @@ app.get("/api/notes/:id", (request, response, next) => {
 
 app.delete("/api/notes/:id", (request, response, next) => {
   Note.findByIdAndRemove(request.params.id)
-    .then((result) => {
+    .then(() => {
       response.status(204).end();
     })
     .catch((error) => next(error));
