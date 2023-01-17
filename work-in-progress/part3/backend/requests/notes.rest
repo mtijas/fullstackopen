@@ -10,4 +10,22 @@ content-type: application/json
 }
 
 ###
+POST http://localhost:3001/api/notes/ HTTP/1.1
+content-type: application/json
+
+{
+    "content": "err",
+    "important": true
+}
+
+###
+PUT http://localhost:3001/api/notes/63c29de6b01b32a833f6c330 HTTP/1.1
+content-type: application/json
+
+{
+    "content": "err",
+    "important": true
+}
+
+###
 DELETE http://localhost:3001/api/notes/63c6a277212a27318d0d5c9d
