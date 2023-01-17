@@ -10,7 +10,7 @@ const App = () => {
   const [newName, setNewName] = useState("");
   const [newNumber, setNewNumber] = useState("");
   const [filter, setFilter] = useState("");
-  const [notification, setNotification] = useState(null)
+  const [notification, setNotification] = useState(null);
 
   useEffect(() => {
     personsService.getAll().then((initialPersons) => {
@@ -22,18 +22,22 @@ const App = () => {
     const person = persons.find((person) => person.id === id);
     const changedPerson = { ...person, number: number };
 
-    personsService.update(id, changedPerson).then((returnedPerson) => {
-      setPersons(
-        persons.map((person) => (person.id !== id ? person : returnedPerson))
-      );
-      setNotification(
-        {
+    personsService
+      .update(id, changedPerson)
+      .then((returnedPerson) => {
+        setPersons(
+          persons.map((person) => (person.id !== id ? person : returnedPerson))
+        );
+        setNotification({
           message: `Updated '${person.name}'`,
-          type: 'success'
-        }
-      );
-      setTimeout(() => setNotification(null), 5000);
-    });
+          type: "success",
+        });
+        setTimeout(() => setNotification(null), 5000);
+      })
+      .catch((error) => {
+        setNotification({ message: error.response.data.error, type: "error" });
+        setTimeout(() => setNotification(null), 5000);
+      });
   };
 
   const addPerson = (event) => {
@@ -60,40 +64,40 @@ const App = () => {
 
     personsService.create(personObject).then((returnedPerson) => {
       setPersons(persons.concat(returnedPerson));
-      setNotification(
-        {
-          message: `Added '${newName}'`,
-          type: 'success'
-        }
-      );
+      setNotification({
+        message: `Added '${newName}'`,
+        type: "success",
+      });
       setTimeout(() => setNotification(null), 5000);
       setNewName("");
       setNewNumber("");
+    })
+    .catch((error) => {
+      setNotification({ message: error.response.data.error, type: "error" });
+      setTimeout(() => setNotification(null), 5000);
     });
   };
 
   const deletePerson = (id) => {
     const person = persons.find((person) => person.id === id);
-    personsService.deleteObject(id).then((returnedData) => {
-      setPersons(persons.filter((person) => person.id !== id));
-      setNotification(
-        {
+    personsService
+      .deleteObject(id)
+      .then((returnedData) => {
+        setPersons(persons.filter((person) => person.id !== id));
+        setNotification({
           message: `Deleted '${person.name}'`,
-          type: 'success'
-        }
-      );
-      setTimeout(() => setNotification(null), 5000);
-    })
-    .catch((error) => {
-      setNotification(
-        {
+          type: "success",
+        });
+        setTimeout(() => setNotification(null), 5000);
+      })
+      .catch((error) => {
+        setNotification({
           message: `The person '${person.name}' was already deleted from the server`,
-          type: 'error'
-        }
-      );
-      setTimeout(() => setNotification(null), 5000);
-      setPersons(persons.filter((person) => person.id !== id));
-    })
+          type: "error",
+        });
+        setTimeout(() => setNotification(null), 5000);
+        setPersons(persons.filter((person) => person.id !== id));
+      });
   };
 
   const shownPersons = persons.filter((person) =>

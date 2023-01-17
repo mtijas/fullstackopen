@@ -6,7 +6,7 @@ content-type: application/json
 
 {
     "name": "test user 2",
-    "number": "42"
+    "number": "4212312313123"
 }
 
 ###
