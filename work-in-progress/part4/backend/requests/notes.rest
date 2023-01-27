@@ -3,6 +3,7 @@ GET http://localhost:3001/api/notes/
 ###
 POST http://localhost:3001/api/notes/
 content-type: application/json
+authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InJlc3QtdGVzdC11c2VyIiwiaWQiOiI2M2QyYzk5OTZkNjM0M2I3YzJlOGRmMmUiLCJpYXQiOjE2NzQ4MTY1MjAsImV4cCI6MTY3NDgyMDEyMH0.xXR1XzNreAJWohKKXoZdpOB_SaTGclCJtY_14QUwCL0
 
 {
     "content": "REST Client FTW!",
