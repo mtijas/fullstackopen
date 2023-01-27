@@ -6,7 +6,8 @@ content-type: application/json
 
 {
     "content": "REST Client FTW!",
-    "important": true
+    "important": true,
+    "userId": "63d2c9996d6343b7c2e8df2e"
 }
 
 ###
@@ -15,7 +16,8 @@ content-type: application/json
 
 {
     "content": "err",
-    "important": true
+    "important": true,
+    "userId": "63d2c9996d6343b7c2e8df2e"
 }
 
 ###
@@ -24,7 +26,8 @@ content-type: application/json
 
 {
     "content": "err",
-    "important": true
+    "important": true,
+    "userId": "63d2c9996d6343b7c2e8df2e"
 }
 
 ###
