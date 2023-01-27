@@ -1,13 +1,44 @@
+const bcrypt = require("bcrypt");
 const mongoose = require("mongoose");
 const supertest = require("supertest");
 const helper = require("./test_helper");
 const app = require("../app");
 const api = supertest(app);
 const Blog = require("../models/blog");
+const User = require("../models/user");
+
+async function fetchBearerToken() {
+  const result = await api
+    .post("/api/login")
+    .send({ username: "root", password: "Danger Zone" });
+
+  return `Bearer ${result.body.token}`;
+}
 
 beforeEach(async () => {
   await Blog.deleteMany({});
-  await Blog.insertMany(helper.initialBlogs);
+  await User.deleteMany({});
+
+  let passwordHash = await bcrypt.hash("Danger Zone", 10);
+  let user = new User({ username: "root", passwordHash });
+
+  await user.save();
+
+  const initialBlogs = helper.initialBlogs.map((b) => {
+    return {
+      ...b,
+      user: user._id,
+    };
+  });
+
+  passwordHash = await bcrypt.hash("Highway", 10);
+  user = new User({ username: "user", passwordHash });
+
+  await user.save();
+
+  initialBlogs[0].user = user._id;
+
+  await Blog.insertMany(initialBlogs);
 });
 
 describe("common api behaviour", () => {
@@ -41,7 +72,7 @@ describe("viewing a specific blog", () => {
       .get(`/api/blogs/${blogToView.id}`)
       .expect(200)
       .expect("Content-Type", /application\/json/);
-    expect(resultBlog.body).toEqual(blogToView);
+    expect(resultBlog.body.author).toEqual(blogToView.author);
   });
 
   test("fails with 404 if blog does not exist", async () => {
@@ -68,6 +99,7 @@ describe("adding a new blog", () => {
 
     await api
       .post("/api/blogs")
+      .set({ Authorization: await fetchBearerToken() })
       .send(blog)
       .expect(201)
       .expect("Content-Type", /application\/json/);
@@ -89,6 +121,7 @@ describe("adding a new blog", () => {
 
     const response = await api
       .post("/api/blogs")
+      .set({ Authorization: await fetchBearerToken() })
       .send(blog)
       .expect(201)
       .expect("Content-Type", /application\/json/);
@@ -102,7 +135,11 @@ describe("adding a new blog", () => {
       url: "url",
     };
 
-    await api.post("/api/blogs").send(blog).expect(400);
+    await api
+      .post("/api/blogs")
+      .set({ Authorization: await fetchBearerToken() })
+      .send(blog)
+      .expect(400);
 
     const response = await api.get("/api/blogs");
     expect(response.body).toHaveLength(helper.initialBlogs.length);
@@ -114,7 +151,11 @@ describe("adding a new blog", () => {
       author: "author",
     };
 
-    await api.post("/api/blogs").send(blog).expect(400);
+    await api
+      .post("/api/blogs")
+      .set({ Authorization: await fetchBearerToken() })
+      .send(blog)
+      .expect(400);
 
     const response = await api.get("/api/blogs");
     expect(response.body).toHaveLength(helper.initialBlogs.length);
@@ -124,9 +165,12 @@ describe("adding a new blog", () => {
 describe("deleting a blog", () => {
   test("an existing blog can be deleted", async () => {
     const blogsAtStart = await helper.blogsInDb();
-    const blogToDelete = blogsAtStart[0];
+    const blogToDelete = blogsAtStart[1];
 
-    await api.delete(`/api/blogs/${blogToDelete.id}`).expect(204);
+    await api
+      .delete(`/api/blogs/${blogToDelete.id}`)
+      .set({ Authorization: await fetchBearerToken() })
+      .expect(204);
 
     const blogsAfterDelete = await helper.blogsInDb();
     expect(blogsAfterDelete).toHaveLength(blogsAtStart.length - 1);
@@ -135,10 +179,26 @@ describe("deleting a blog", () => {
     expect(titles).not.toContain(blogToDelete.title);
   });
 
+  test("deleting a blog that belongs to another user is not allowed", async () => {
+    const blogsAtStart = await helper.blogsInDb();
+    const blogToDelete = blogsAtStart[0];
+
+    await api
+      .delete(`/api/blogs/${blogToDelete.id}`)
+      .set({ Authorization: await fetchBearerToken() })
+      .expect(401);
+
+    const blogsAfterDelete = await helper.blogsInDb();
+    expect(blogsAfterDelete).toHaveLength(blogsAtStart.length);
+  });
+
   test("deleting nonexisting blog results 204", async () => {
     const validNonExistingBlogId = await helper.nonExistingId();
 
-    await api.delete(`/api/blogs/${validNonExistingBlogId}`).expect(204);
+    await api
+      .delete(`/api/blogs/${validNonExistingBlogId}`)
+      .set({ Authorization: await fetchBearerToken() })
+      .expect(204);
   });
 });
 
@@ -154,6 +214,7 @@ describe("updating a blog", () => {
 
     await api
       .put(`/api/blogs/${blogToUpdate.id}`)
+      .set({ Authorization: await fetchBearerToken() })
       .send(blogToUpdate)
       .expect(200)
       .expect("Content-Type", /application\/json/);
@@ -179,6 +240,7 @@ describe("updating a blog", () => {
 
     await api
       .put(`/api/blogs/${validNonExistingBlogId}`)
+      .set({ Authorization: await fetchBearerToken() })
       .send(blogToUpdate)
       .expect(404);
 
