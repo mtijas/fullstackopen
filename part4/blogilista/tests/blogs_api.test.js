@@ -160,6 +160,25 @@ describe("adding a new blog", () => {
     const response = await api.get("/api/blogs");
     expect(response.body).toHaveLength(helper.initialBlogs.length);
   });
+
+  test("blog without token is not added", async () => {
+    const blog = {
+      title: "title",
+      author: "author",
+      url: "url 42",
+    };
+
+    const result = await api
+      .post("/api/blogs")
+      .send(blog)
+      .expect(401)
+      .expect("Content-Type", /application\/json/);
+
+    expect(result.body.error).toBe("token missing");
+
+    const response = await api.get("/api/blogs");
+    expect(response.body).toHaveLength(helper.initialBlogs.length);
+  });
 });
 
 describe("deleting a blog", () => {

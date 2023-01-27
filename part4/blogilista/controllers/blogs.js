@@ -18,12 +18,10 @@ blogsRouter.get("/:id", async (request, response) => {
 });
 
 blogsRouter.post("/", async (request, response) => {
-  const decodedToken = jwt.verify(request.token, process.env.SECRET);
-  if (!decodedToken.id) {
-    return response.status(401).json({ error: "token invalid" });
+  if (request.token === null) {
+    return response.status(401).json({ error: "token missing" });
   }
-
-  const user = await User.findById(decodedToken.id);
+  const user = request.user;
 
   const blog = new Blog({
     title: request.body.title,
@@ -60,19 +58,12 @@ blogsRouter.put("/:id", async (request, response) => {
 });
 
 blogsRouter.delete("/:id", async (request, response) => {
-  const decodedToken = jwt.verify(request.token, process.env.SECRET);
-  if (!decodedToken.id) {
-    return response.status(401).json({ error: "token invalid" });
-  }
-
-  const user = await User.findById(decodedToken.id);
-
   const blogToDelete = await Blog.findById(request.params.id);
 
   if (blogToDelete === null) {
     return response.status(204).end();
   }
-  if (blogToDelete.user.toString() !== user._id.toString()) {
+  if (blogToDelete.user.toString() !== request.user._id.toString()) {
     return response.status(401).end();
   }
 
