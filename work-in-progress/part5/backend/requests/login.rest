@@ -1,0 +1,10 @@
+GET http://localhost:3001/api/login
+
+###
+POST http://localhost:3001/api/login
+content-type: application/json
+
+{
+    "username": "rest-test-user",
+    "password": "secret"
+}

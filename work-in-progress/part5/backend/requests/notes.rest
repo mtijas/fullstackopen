@@ -1,0 +1,35 @@
+GET http://localhost:3001/api/notes/
+
+###
+POST http://localhost:3001/api/notes/
+content-type: application/json
+authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InJlc3QtdGVzdC11c2VyIiwiaWQiOiI2M2QyYzk5OTZkNjM0M2I3YzJlOGRmMmUiLCJpYXQiOjE2NzQ4MTY1MjAsImV4cCI6MTY3NDgyMDEyMH0.xXR1XzNreAJWohKKXoZdpOB_SaTGclCJtY_14QUwCL0
+
+{
+    "content": "REST Client FTW!",
+    "important": true,
+    "userId": "63d2c9996d6343b7c2e8df2e"
+}
+
+###
+POST http://localhost:3001/api/notes/
+content-type: application/json
+
+{
+    "content": "err",
+    "important": true,
+    "userId": "63d2c9996d6343b7c2e8df2e"
+}
+
+###
+PUT http://localhost:3001/api/notes/63c29de6b01b32a833f6c330
+content-type: application/json
+
+{
+    "content": "err",
+    "important": true,
+    "userId": "63d2c9996d6343b7c2e8df2e"
+}
+
+###
+DELETE http://localhost:3001/api/notes/63c6dc1f212a27318d0d5ca3
