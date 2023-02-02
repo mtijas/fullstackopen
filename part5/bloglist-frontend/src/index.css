@@ -1,0 +1,20 @@
+h1 {
+    color: #DD7700;
+    font-style: italic;
+}
+
+.error,
+.success {
+    padding: .5em;
+    font-size: 1.3rem;
+}
+
+.error {
+    border: 4px solid #FF0055;
+    background-color: #FFF0F0;
+}
+
+.success {
+    border: 4px solid #00FF55;
+    background-color: #F0FFF0;
+}
