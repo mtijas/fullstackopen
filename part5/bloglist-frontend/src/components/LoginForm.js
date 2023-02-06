@@ -1,30 +1,36 @@
 import { useState } from "react";
 
-export default function LoginForm(props) {
+export default function LoginForm({
+  loginService,
+  blogService,
+  user,
+  handleSetUser,
+  handleSetNotification,
+}) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
   async function handleLogin(event) {
     event.preventDefault();
     try {
-      const user = await props.loginService.login({
+      const user = await loginService.login({
         username,
         password,
       });
 
       window.localStorage.setItem("loggedBlogappUser", JSON.stringify(user));
 
-      props.blogService.setToken(user.token);
-      props.setUser(user);
+      blogService.setToken(user.token);
+      handleSetUser(user);
       setUsername("");
       setPassword("");
     } catch (exception) {
-      props.setNotification({
+      handleSetNotification({
         class: "error",
         message: exception.response.data.error,
       });
       setTimeout(() => {
-        props.setNotification(null);
+        handleSetNotification(null);
       }, 5000);
     }
   }
@@ -32,20 +38,20 @@ export default function LoginForm(props) {
   function handleLogout(event) {
     event.preventDefault();
     window.localStorage.removeItem("loggedBlogappUser");
-    props.setUser(null);
-    props.setNotification({
+    handleSetUser(null);
+    handleSetNotification({
         class: "success",
         message: "Logged out",
       });
     setTimeout(() => {
-      props.setNotification(null);
+      handleSetNotification(null);
     }, 5000);
   }
 
-  if (props.user !== null) {
+  if (user !== null) {
     return (
       <p>
-        {props.user.name} logged in
+        {user.name} logged in
         <button onClick={handleLogout}>
           Log out
         </button>

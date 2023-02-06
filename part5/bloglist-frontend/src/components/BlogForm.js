@@ -1,6 +1,13 @@
 import { useState } from "react";
 
-export default function BlogForm(props) {
+export default function BlogForm({
+  blogService,
+  user,
+  blogs,
+  handleSetBlogs,
+  handleSetNotification,
+  blogFormRef,
+}) {
   const [title, setTitle] = useState("");
   const [author, setAuthor] = useState("");
   const [url, setUrl] = useState("");
@@ -9,30 +16,34 @@ export default function BlogForm(props) {
     event.preventDefault();
 
     try {
-      const blog = await props.blogService.create({ author, title, url });
-      props.setBlogs(props.blogs.concat(blog));
+      const blog = await blogService.create({ author, title, url });
+      blog.user = user;
+      handleSetBlogs(blogs.concat(blog));
       setTitle("");
       setAuthor("");
       setUrl("");
-      props.setNotification({
+
+      blogFormRef.current.toggleVisibility();
+
+      handleSetNotification({
         class: "success",
         message: `New blog added: ${blog.title} by ${blog.author}`,
       });
       setTimeout(() => {
-        props.setNotification(null);
+        handleSetNotification(null);
       }, 5000);
     } catch (exception) {
-      props.setNotification({
+      handleSetNotification({
         class: "error",
         message: exception.response.data.error,
       });
       setTimeout(() => {
-        props.setNotification(null);
+        handleSetNotification(null);
       }, 5000);
     }
   }
 
-  if (props.user === null) {
+  if (user === null) {
     return;
   }
 

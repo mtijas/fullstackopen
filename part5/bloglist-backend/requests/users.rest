@@ -9,3 +9,13 @@ content-type: application/json
     "name": "REST Test User",
     "password": "secret"
 }
+
+###
+POST http://localhost:3003/api/users
+content-type: application/json
+
+{
+    "username": "user",
+    "name": "Another user",
+    "password": "password"
+}

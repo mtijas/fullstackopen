@@ -1,15 +1,18 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { BlogList } from "./components/Blog";
 import BlogForm from "./components/BlogForm";
 import Notification from "./components/Notification";
 import LoginForm from "./components/LoginForm";
 import blogService from "./services/blogs";
 import loginService from "./services/login";
+import Togglable from "./components/Togglable";
 
 const App = () => {
   const [blogs, setBlogs] = useState([]);
   const [user, setUser] = useState(null);
   const [notification, setNotification] = useState(null);
+
+  const blogFormRef = useRef();
 
   useEffect(() => {
     blogService.getAll().then((blogs) => setBlogs(blogs));
@@ -34,17 +37,28 @@ const App = () => {
         blogService={blogService}
         loginService={loginService}
         user={user}
-        setUser={setUser}
-        setNotification={setNotification}
+        handleSetUser={(u) => setUser(u)}
+        handleSetNotification={(n) => setNotification(n)}
       />
-      <BlogForm
-        blogService={blogService}
-        user={user}
-        setNotification={setNotification}
-        blogs={blogs}
-        setBlogs={setBlogs}
-      />
-      {user !== null && BlogList(blogs)}
+      <Togglable buttonLabel="Add a new note" ref={blogFormRef}>
+        <BlogForm
+          blogService={blogService}
+          user={user}
+          handleSetNotification={(n) => setNotification(n)}
+          blogs={blogs}
+          handleSetBlogs={(b) => setBlogs(b)}
+          blogFormRef={blogFormRef}
+        />
+      </Togglable>
+      {user !== null && (
+        <BlogList
+          blogs={blogs}
+          blogService={blogService}
+          handleSetNotification={(n) => setNotification(n)}
+          handleSetBlogs={(b) => setBlogs(b)}
+          user={user}
+        />
+      )}
     </div>
   );
 };
