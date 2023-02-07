@@ -13,7 +13,7 @@ export default function App() {
   const [notification, setNotification] = useState(null);
   const [user, setUser] = useState(null);
 
-  const noteFormRef = useRef()
+  const noteFormRef = useRef();
 
   useEffect(() => {
     noteService.getAll().then((initialNotes) => {
@@ -39,7 +39,7 @@ export default function App() {
       .then((returnedNote) => {
         setNotes(notes.map((n) => (n.id !== id ? n : returnedNote)));
       })
-      .catch((error) => {
+      .catch(() => {
         setNotification({
           class: "error",
           message: `The note '${note.content}' was already deleted from the server`,
@@ -47,7 +47,7 @@ export default function App() {
         setTimeout(() => setNotification(null), 5000);
         setNotes(notes.filter((n) => n.id !== id));
       });
-  };
+  }
 
   const notesToShow = showAll ? notes : notes.filter((note) => note.important);
 
@@ -66,7 +66,7 @@ export default function App() {
           handleSetNotification={(n) => setNotification(n)}
         />
       </Togglable>
-      {user !== null && 
+      {user !== null && (
         <Togglable buttonLabel="Add a new note" ref={noteFormRef}>
           <NoteForm
             noteService={noteService}
@@ -76,7 +76,7 @@ export default function App() {
             noteFormRef={noteFormRef}
           />
         </Togglable>
-      }
+      )}
 
       <div>
         <button onClick={() => setShowAll(!showAll)}>

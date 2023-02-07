@@ -1,11 +1,12 @@
 import { useState } from "react";
+import PropTypes from "prop-types";
 
 export default function LoginForm({
-  loginService, 
+  loginService,
   noteService,
   handleSetUser,
   handleSetNotification,
-  user
+  user,
 }) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -18,7 +19,10 @@ export default function LoginForm({
         password,
       });
 
-      window.localStorage.setItem("loggedNoteappUser", JSON.stringify(userObject));
+      window.localStorage.setItem(
+        "loggedNoteappUser",
+        JSON.stringify(userObject)
+      );
 
       noteService.setToken(userObject.token);
       handleSetUser(userObject);
@@ -40,9 +44,9 @@ export default function LoginForm({
     window.localStorage.removeItem("loggedNoteappUser");
     handleSetUser(null);
     handleSetNotification({
-        class: "success",
-        message: "Logged out",
-      });
+      class: "success",
+      message: "Logged out",
+    });
     setTimeout(() => {
       handleSetNotification(null);
     }, 5000);
@@ -52,9 +56,7 @@ export default function LoginForm({
     return (
       <p>
         {user.name} logged in
-        <button onClick={handleLogout}>
-          Log out
-        </button>
+        <button onClick={handleLogout}>Log out</button>
       </p>
     );
   }
@@ -86,3 +88,11 @@ export default function LoginForm({
     </>
   );
 }
+
+LoginForm.propTypes = {
+  loginService: PropTypes.object.isRequired,
+  noteService: PropTypes.object.isRequired,
+  handleSetUser: PropTypes.func.isRequired,
+  handleSetNotification: PropTypes.func.isRequired,
+  user: PropTypes.object,
+};
