@@ -1,4 +1,5 @@
 import { useState } from "react";
+import PropTypes from "prop-types";
 
 export default function LoginForm({
   loginService,
@@ -40,9 +41,9 @@ export default function LoginForm({
     window.localStorage.removeItem("loggedBlogappUser");
     handleSetUser(null);
     handleSetNotification({
-        class: "success",
-        message: "Logged out",
-      });
+      class: "success",
+      message: "Logged out",
+    });
     setTimeout(() => {
       handleSetNotification(null);
     }, 5000);
@@ -52,9 +53,7 @@ export default function LoginForm({
     return (
       <p>
         {user.name} logged in
-        <button onClick={handleLogout}>
-          Log out
-        </button>
+        <button onClick={handleLogout}>Log out</button>
       </p>
     );
   }
@@ -86,3 +85,11 @@ export default function LoginForm({
     </div>
   );
 }
+
+LoginForm.propTypes = {
+  loginService: PropTypes.object.isRequired,
+  blogService: PropTypes.object.isRequired,
+  handleSetUser: PropTypes.func.isRequired,
+  handleSetNotification: PropTypes.func.isRequired,
+  user: PropTypes.object,
+};
