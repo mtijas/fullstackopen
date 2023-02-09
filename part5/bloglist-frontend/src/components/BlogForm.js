@@ -58,6 +58,7 @@ export default function BlogForm({
             value={title}
             name="title"
             onChange={({ target }) => setTitle(target.value)}
+            placeholder="title"
           />
         </div>
         <div>
@@ -67,6 +68,7 @@ export default function BlogForm({
             value={author}
             name="author"
             onChange={({ target }) => setAuthor(target.value)}
+            placeholder="author"
           />
         </div>
         <div>
@@ -76,6 +78,7 @@ export default function BlogForm({
             value={url}
             name="url"
             onChange={({ target }) => setUrl(target.value)}
+            placeholder="url"
           />
         </div>
         <button type="submit">Create</button>
