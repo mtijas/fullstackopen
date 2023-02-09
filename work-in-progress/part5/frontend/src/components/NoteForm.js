@@ -7,9 +7,9 @@ export default function NoteForm({
   notes,
   noteFormRef,
 }) {
-  const [newNote, setNewNote] = useState("a new note...");
+  const [newNote, setNewNote] = useState("");
 
-  function addNote(event) {
+  async function addNote(event) {
     event.preventDefault();
     const noteObject = {
       content: newNote,
@@ -18,19 +18,17 @@ export default function NoteForm({
 
     noteFormRef.current.toggleVisibility();
 
-    noteService
-      .create(noteObject)
-      .then((returnedNote) => {
-        handleSetNotes(notes.concat(returnedNote));
-        setNewNote("");
-      })
-      .catch((error) => {
-        handleSetNotification({
-          class: "error",
-          message: error.response.data.error,
-        });
-        setTimeout(() => handleSetNotification(null), 5000);
+    try {
+      const returnedNote = await noteService.create(noteObject);
+      handleSetNotes(notes.concat(returnedNote));
+      setNewNote("");
+    } catch (exception) {
+      handleSetNotification({
+        class: "error",
+        message: exception.response.data.error,
       });
+      setTimeout(() => handleSetNotification(null), 5000);
+    }
   }
 
   return (
@@ -38,6 +36,7 @@ export default function NoteForm({
       <input
         value={newNote}
         onChange={(event) => setNewNote(event.target.value)}
+        placeholder="Note content"
       />
       <button type="submit">Save</button>
     </form>
