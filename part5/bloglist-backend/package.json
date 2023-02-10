@@ -7,7 +7,12 @@
     "start": "NODE_ENV=production node index.js",
     "dev": "NODE_ENV=development nodemon index.js",
     "test": "NODE_ENV=test jest --verbose --runInBand --forceExit",
-    "lint": "eslint ."
+    "build:ui": "rm -rf build && cd ../frontend/ && npm run build && cp -r build ../backend/",
+    "deploy": "~/.fly/bin/flyctl deploy",
+    "deploy:full": "npm run build:ui && npm run deploy",
+    "logs:prod": "~/.fly/bin/flyctl logs",
+    "lint": "eslint .",
+    "start:test": "NODE_ENV=test node index.js"
   },
   "author": "Markus Ijäs",
   "license": "MIT",

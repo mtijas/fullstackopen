@@ -15,7 +15,19 @@ const App = () => {
   const blogFormRef = useRef();
 
   useEffect(() => {
-    blogService.getAll().then((blogs) => setBlogs(blogs));
+    async function fetchData() {
+      try {
+        const fetchedBlogs = await blogService.getAll();
+        setBlogs(fetchedBlogs);
+      } catch (exception) {
+        console.error(`Error getting initial data: '${exception}'`);
+        setNotification({
+          class: "error",
+          message: `Error getting initial data: '${exception}'`,
+        });
+      }
+    }
+    fetchData();
   }, []);
 
   useEffect(() => {
@@ -40,7 +52,7 @@ const App = () => {
         handleSetUser={(u) => setUser(u)}
         handleSetNotification={(n) => setNotification(n)}
       />
-      <Togglable buttonLabel="Add a new note" ref={blogFormRef}>
+      <Togglable buttonLabel="Add a new blog" ref={blogFormRef}>
         <BlogForm
           blogService={blogService}
           user={user}
