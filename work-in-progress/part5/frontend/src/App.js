@@ -16,9 +16,19 @@ export default function App() {
   const noteFormRef = useRef();
 
   useEffect(() => {
-    noteService.getAll().then((initialNotes) => {
-      setNotes(initialNotes);
-    });
+    async function fetchData() {
+      try {
+        const initialNotes = await noteService.getAll();
+        setNotes(initialNotes);
+      } catch (exception) {
+        console.error(`Error getting initial notes: '${exception}'`);
+        setNotification({
+          class: "error",
+          message: `Error getting initial notes: '${exception}'`,
+        });
+      }
+    }
+    fetchData();
   }, []);
 
   useEffect(() => {
@@ -93,6 +103,12 @@ export default function App() {
           />
         ))}
       </ul>
+
+      <footer>
+        <p>
+          Note app, Department of Computer Science, University of Helsinki 2023
+        </p>
+      </footer>
     </>
   );
 }
