@@ -4,7 +4,7 @@ const initialState = {
   bad: 0,
 };
 
-const counterReducer = (state = initialState, action) => {
+export default function counterReducer(state = initialState, action) {
   console.log(action);
   switch (action.type) {
     case "GOOD":
@@ -21,6 +21,10 @@ const counterReducer = (state = initialState, action) => {
     default:
       return state;
   }
-};
+}
 
-export default counterReducer;
+export function addVote(type) {
+  return {
+    type: type,
+  };
+}
