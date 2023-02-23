@@ -1,0 +1,14 @@
+{
+  "anecdotes": [
+    {
+      "content": "prefilled anecdote",
+      "votes": 0,
+      "id": 1
+    },
+    {
+      "content": "sadfasdf",
+      "votes": 0,
+      "id": 2
+    }
+  ]
+}
