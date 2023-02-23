@@ -2,13 +2,18 @@
   "anecdotes": [
     {
       "content": "prefilled anecdote",
-      "votes": 0,
+      "votes": 7,
       "id": 1
     },
     {
       "content": "sadfasdf",
-      "votes": 0,
+      "votes": 8,
       "id": 2
+    },
+    {
+      "content": "Anecdote23424",
+      "votes": 0,
+      "id": 3
     }
   ]
 }
