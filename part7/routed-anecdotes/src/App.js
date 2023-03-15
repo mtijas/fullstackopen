@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Routes, Route, Link, useParams } from "react-router-dom";
+import { Routes, Route, Link, useMatch } from "react-router-dom";
 
 const Menu = () => {
   const padding = {
@@ -115,10 +115,8 @@ const CreateNew = (props) => {
   );
 };
 
-const Anecdote = ({ anecdotes }) => {
-  const id = useParams().id;
-  const anecdote = anecdotes.find((a) => a.id === Number(id));
-  if (anecdote === undefined) {
+const Anecdote = ({ anecdote }) => {
+  if (anecdote === null || anecdote === undefined) {
     return <p>Anecdote not found.</p>;
   }
   return (
@@ -152,6 +150,11 @@ const App = () => {
     },
   ]);
 
+  const match = useMatch("/anecdotes/:id");
+  const anecdote = match
+    ? anecdotes.find((a) => a.id === Number(match.params.id))
+    : null;
+
   const [notification, setNotification] = useState("");
 
   const addNew = (anecdote) => {
@@ -182,7 +185,7 @@ const App = () => {
         <Route path="/create" element={<CreateNew addNew={addNew} />} />
         <Route
           path="/anecdotes/:id"
-          element={<Anecdote anecdotes={anecdotes} />}
+          element={<Anecdote anecdote={anecdote} />}
         />
       </Routes>
       <Footer />
