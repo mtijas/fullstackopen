@@ -81,6 +81,8 @@ const CreateNew = (props) => {
       votes: 0,
     });
     navigate("/");
+    props.setNotification(`A new anecdote "${content}" created!`);
+    setTimeout(() => {props.setNotification("")}, 5000);
   };
 
   return (
@@ -134,6 +136,18 @@ const Anecdote = ({ anecdote }) => {
   );
 };
 
+const Notification = ({ notification }) => {
+  if (notification === "") {
+    return;
+  }
+
+  return (
+    <div>
+      <p>{notification}</p>
+    </div>
+  );
+};
+
 const App = () => {
   const [anecdotes, setAnecdotes] = useState([
     {
@@ -181,10 +195,16 @@ const App = () => {
     <>
       <h1>Software anecdotes</h1>
       <Menu />
+      <Notification notification={notification} />
       <Routes>
         <Route path="/" element={<AnecdoteList anecdotes={anecdotes} />} />
         <Route path="/about" element={<About />} />
-        <Route path="/create" element={<CreateNew addNew={addNew} />} />
+        <Route
+          path="/create"
+          element={
+            <CreateNew addNew={addNew} setNotification={setNotification} />
+          }
+        />
         <Route
           path="/anecdotes/:id"
           element={<Anecdote anecdote={anecdote} />}
