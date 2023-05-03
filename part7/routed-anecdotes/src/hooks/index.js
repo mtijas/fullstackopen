@@ -7,9 +7,14 @@ export function useField(type) {
     setValue(event.target.value);
   }
 
+  function reset() {
+    setValue("");
+  }
+
   return {
     type,
     value,
     onChange,
+    reset,
   };
 }
