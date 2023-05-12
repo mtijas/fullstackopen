@@ -1,6 +1,9 @@
 import PropTypes from "prop-types";
+import { useSelector } from "react-redux";
 
-export default function Notification({ notification }) {
+export default function Notification() {
+  const notification = useSelector(({ notification }) => notification);
+
   if (notification === null) {
     return null;
   }

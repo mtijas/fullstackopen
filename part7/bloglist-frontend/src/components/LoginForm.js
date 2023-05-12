@@ -1,15 +1,17 @@
 import { useState } from "react";
 import PropTypes from "prop-types";
+import { useDispatch } from "react-redux";
+import { setNotification } from "../reducers/notificationReducer";
 
 export default function LoginForm({
   loginService,
   blogService,
   user,
   handleSetUser,
-  handleSetNotification,
 }) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const dispatch = useDispatch();
 
   async function handleLogin(event) {
     event.preventDefault();
@@ -26,13 +28,7 @@ export default function LoginForm({
       setUsername("");
       setPassword("");
     } catch (exception) {
-      handleSetNotification({
-        class: "error",
-        message: exception.response.data.error,
-      });
-      setTimeout(() => {
-        handleSetNotification(null);
-      }, 5000);
+      dispatch(setNotification(exception.response.data.error, "error", 5));
     }
   }
 
@@ -40,13 +36,7 @@ export default function LoginForm({
     event.preventDefault();
     window.localStorage.removeItem("loggedBlogappUser");
     handleSetUser(null);
-    handleSetNotification({
-      class: "success",
-      message: "Logged out",
-    });
-    setTimeout(() => {
-      handleSetNotification(null);
-    }, 5000);
+    dispatch(setNotification("Logged out", "success", 5));
   }
 
   if (user !== null) {
@@ -90,6 +80,5 @@ LoginForm.propTypes = {
   loginService: PropTypes.object.isRequired,
   blogService: PropTypes.object.isRequired,
   handleSetUser: PropTypes.func.isRequired,
-  handleSetNotification: PropTypes.func.isRequired,
   user: PropTypes.object,
 };

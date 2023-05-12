@@ -1,16 +1,18 @@
 import { useState } from "react";
+import { useDispatch } from "react-redux";
+import { setNotification } from "../reducers/notificationReducer";
 
 export default function BlogForm({
   blogService,
   user,
   blogs,
   handleSetBlogs,
-  handleSetNotification,
   blogFormRef,
 }) {
   const [title, setTitle] = useState("");
   const [author, setAuthor] = useState("");
   const [url, setUrl] = useState("");
+  const dispatch = useDispatch();
 
   async function handleSubmit(event) {
     event.preventDefault();
@@ -25,21 +27,15 @@ export default function BlogForm({
 
       blogFormRef.current.toggleVisibility();
 
-      handleSetNotification({
-        class: "success",
-        message: `New blog added: ${blog.title} by ${blog.author}`,
-      });
-      setTimeout(() => {
-        handleSetNotification(null);
-      }, 5000);
+      dispatch(
+        setNotification(
+          `New blog added: ${blog.title} by ${blog.author}`,
+          "success",
+          5
+        )
+      );
     } catch (exception) {
-      handleSetNotification({
-        class: "error",
-        message: exception.response.data.error,
-      });
-      setTimeout(() => {
-        handleSetNotification(null);
-      }, 5000);
+      dispatch(setNotification(exception.response.data.error, "error", 5));
     }
   }
 

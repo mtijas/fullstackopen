@@ -1,12 +1,8 @@
 import { React, useState } from "react";
+import { useDispatch } from "react-redux";
+import { setNotification } from "../reducers/notificationReducer";
 
-function BlogList({
-  blogs,
-  blogService,
-  handleSetNotification,
-  handleSetBlogs,
-  user,
-}) {
+function BlogList({ blogs, blogService, handleSetBlogs, user }) {
   const sortedBlogs = blogs.sort((a, b) => b.likes - a.likes);
   return (
     <>
@@ -16,7 +12,6 @@ function BlogList({
           blog={blog}
           blogs={blogs}
           blogService={blogService}
-          handleSetNotification={handleSetNotification}
           handleSetBlogs={handleSetBlogs}
           user={user}
         />
@@ -25,15 +20,9 @@ function BlogList({
   );
 }
 
-function Blog({
-  blog,
-  blogs,
-  blogService,
-  handleSetNotification,
-  handleSetBlogs,
-  user,
-}) {
+function Blog({ blog, blogs, blogService, handleSetBlogs, user }) {
   const [showDetails, setShowDetails] = useState(false);
+  const dispatch = useDispatch();
 
   function handleClose(event) {
     event.preventDefault();
@@ -54,13 +43,7 @@ function Blog({
       returnedBlog.user = blog.user;
       handleSetBlogs(blogs.map((b) => (b.id !== blog.id ? b : returnedBlog)));
     } catch (exception) {
-      handleSetNotification({
-        class: "error",
-        message: exception.response.data.error,
-      });
-      setTimeout(() => {
-        handleSetNotification(null);
-      }, 5000);
+      dispatch(setNotification(exception.response.data.error, "error", 5));
     }
   }
 
@@ -75,21 +58,9 @@ function Blog({
       await blogService.destroy(blog.id);
       handleSetBlogs(blogs.filter((b) => b.id !== blog.id));
 
-      handleSetNotification({
-        class: "success",
-        message: "Blog deleted",
-      });
-      setTimeout(() => {
-        handleSetNotification(null);
-      }, 5000);
+      dispatch(setNotification("Blog deleted", "success", 5));
     } catch (exception) {
-      handleSetNotification({
-        class: "error",
-        message: "Error deleting blog",
-      });
-      setTimeout(() => {
-        handleSetNotification(null);
-      }, 5000);
+      dispatch(setNotification("Error deleting blog", "error", 5));
     }
   }
 
