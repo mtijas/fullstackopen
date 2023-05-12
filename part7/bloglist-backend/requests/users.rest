@@ -1,0 +1,21 @@
+GET http://localhost:3003/api/users
+
+###
+POST http://localhost:3003/api/users
+content-type: application/json
+
+{
+    "username": "rest-test-user",
+    "name": "REST Test User",
+    "password": "secret"
+}
+
+###
+POST http://localhost:3003/api/users
+content-type: application/json
+
+{
+    "username": "user",
+    "name": "Another user",
+    "password": "password"
+}
