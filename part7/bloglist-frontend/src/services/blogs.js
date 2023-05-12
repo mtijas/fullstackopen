@@ -20,11 +20,15 @@ async function create(newObject) {
   return response.data;
 }
 
-async function update(id, newObject) {
+async function update(patchedObject) {
   const config = {
     headers: { Authorization: token },
   };
-  const response = await axios.put(`${baseUrl}/${id}`, newObject, config);
+  const response = await axios.put(
+    `${baseUrl}/${patchedObject.id}`,
+    patchedObject,
+    config
+  );
   return response.data;
 }
 

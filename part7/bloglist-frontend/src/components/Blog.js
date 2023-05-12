@@ -1,28 +1,24 @@
 import { React, useState } from "react";
-import { useDispatch } from "react-redux";
-import { setNotification } from "../reducers/notificationReducer";
+import { useDispatch, useSelector } from "react-redux";
+import { deleteBlog, likeBlog } from "../reducers/blogReducer";
 
-function BlogList({ blogs, blogService, handleSetBlogs, user }) {
-  const sortedBlogs = blogs.sort((a, b) => b.likes - a.likes);
+function BlogList() {
+  const blogs = useSelector((state) => {
+    return [...state.blogs].sort((a, b) => b.likes - a.likes);
+  });
   return (
     <>
-      {sortedBlogs.map((blog) => (
-        <Blog
-          key={blog.id}
-          blog={blog}
-          blogs={blogs}
-          blogService={blogService}
-          handleSetBlogs={handleSetBlogs}
-          user={user}
-        />
+      {blogs.map((blog) => (
+        <Blog key={blog.id} blog={blog} />
       ))}
     </>
   );
 }
 
-function Blog({ blog, blogs, blogService, handleSetBlogs, user }) {
+function Blog({ blog }) {
   const [showDetails, setShowDetails] = useState(false);
   const dispatch = useDispatch();
+  const { user } = useSelector((state) => state);
 
   function handleClose(event) {
     event.preventDefault();
@@ -34,34 +30,19 @@ function Blog({ blog, blogs, blogService, handleSetBlogs, user }) {
     setShowDetails(true);
   }
 
-  async function handleLike(event) {
+  function handleLike(event) {
     event.preventDefault();
-
-    const changedBlog = { ...blog, likes: blog.likes + 1 };
-    try {
-      const returnedBlog = await blogService.update(blog.id, changedBlog);
-      returnedBlog.user = blog.user;
-      handleSetBlogs(blogs.map((b) => (b.id !== blog.id ? b : returnedBlog)));
-    } catch (exception) {
-      dispatch(setNotification(exception.response.data.error, "error", 5));
-    }
+    dispatch(likeBlog(blog));
   }
 
-  async function handleDelete(event) {
+  function handleDelete(event) {
     event.preventDefault();
 
     if (!window.confirm(`Do you really want to delete ${blog.title}`)) {
       return;
     }
 
-    try {
-      await blogService.destroy(blog.id);
-      handleSetBlogs(blogs.filter((b) => b.id !== blog.id));
-
-      dispatch(setNotification("Blog deleted", "success", 5));
-    } catch (exception) {
-      dispatch(setNotification("Error deleting blog", "error", 5));
-    }
+    dispatch(deleteBlog(blog.id));
   }
 
   const details = (
