@@ -50,7 +50,6 @@ export function createBlog(content) {
     try {
       const { user } = useSelector((state) => state);
       const newBlog = await blogService.create(content);
-      console.log(user);
       newBlog.user = user;
       dispatch(appendBlog(newBlog));
       dispatch(
