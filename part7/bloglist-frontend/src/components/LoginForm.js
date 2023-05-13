@@ -1,12 +1,12 @@
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { login, logout } from "../reducers/userReducer";
+import { login, logout } from "../reducers/loginReducer";
 
 export default function LoginForm() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const dispatch = useDispatch();
-  const { user } = useSelector((state) => state);
+  const loggedInUser = useSelector((state) => state.loggedInUser);
 
   async function handleLogin(event) {
     event.preventDefault();
@@ -22,10 +22,10 @@ export default function LoginForm() {
     dispatch(logout());
   }
 
-  if (user !== null) {
+  if (loggedInUser !== null) {
     return (
       <p>
-        {user.name} logged in
+        {loggedInUser.name} logged in
         <button onClick={handleLogout}>Log out</button>
       </p>
     );

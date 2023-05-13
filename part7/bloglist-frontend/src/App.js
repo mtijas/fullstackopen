@@ -6,11 +6,11 @@ import Notification from "./components/Notification";
 import LoginForm from "./components/LoginForm";
 import Togglable from "./components/Togglable";
 import { initializeBlogs } from "./reducers/blogReducer";
-import { initializeUser } from "./reducers/userReducer";
+import { initializeUser } from "./reducers/loginReducer";
 
 const App = () => {
   const dispatch = useDispatch();
-  const { user } = useSelector((state) => state);
+  const loggedInUser = useSelector((state) => state.loggedInUser);
 
   const blogFormRef = useRef();
 
@@ -29,7 +29,7 @@ const App = () => {
       <Togglable buttonLabel="Add a new blog" ref={blogFormRef}>
         <BlogForm blogFormRef={blogFormRef} />
       </Togglable>
-      {user !== null && <BlogList />}
+      {loggedInUser !== null && <BlogList />}
     </div>
   );
 };

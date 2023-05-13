@@ -46,11 +46,11 @@ export function initializeBlogs() {
 }
 
 export function createBlog(content) {
-  return async (dispatch, useSelector) => {
+  return async (dispatch, getState) => {
     try {
-      const { user } = useSelector((state) => state);
+      const { loggedInUser } = getState();
       const newBlog = await blogService.create(content);
-      newBlog.user = user;
+      newBlog.user = loggedInUser;
       dispatch(appendBlog(newBlog));
       dispatch(
         setNotification(

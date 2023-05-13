@@ -7,16 +7,16 @@ const userSlice = createSlice({
   name: "user",
   initialState: null,
   reducers: {
-    setUser(state, action) {
+    setLoggedInUser(state, action) {
       return action.payload;
     },
-    removeUser() {
+    emptyLoggedInUser() {
       return null;
     },
   },
 });
 
-export const { setUser, removeUser } = userSlice.actions;
+export const { setLoggedInUser, emptyLoggedInUser } = userSlice.actions;
 export default userSlice.reducer;
 
 export function initializeUser() {
@@ -25,7 +25,7 @@ export function initializeUser() {
     if (loggedUserJSON) {
       const user = JSON.parse(loggedUserJSON);
       blogService.setToken(user.token);
-      dispatch(setUser(user));
+      dispatch(setLoggedInUser(user));
     }
   };
 }
@@ -41,7 +41,7 @@ export function login(username, password) {
       window.localStorage.setItem("loggedBlogappUser", JSON.stringify(user));
 
       blogService.setToken(user.token);
-      dispatch(setUser(user));
+      dispatch(setLoggedInUser(user));
     } catch (exception) {
       dispatch(setNotification(exception.response.data.error, "error", 5));
     }
@@ -51,7 +51,7 @@ export function login(username, password) {
 export function logout() {
   return async (dispatch) => {
     window.localStorage.removeItem("loggedBlogappUser");
-    dispatch(removeUser());
+    dispatch(emptyLoggedInUser());
     dispatch(setNotification("Logged out", "success", 5));
   };
 }

@@ -18,7 +18,7 @@ function BlogList() {
 function Blog({ blog }) {
   const [showDetails, setShowDetails] = useState(false);
   const dispatch = useDispatch();
-  const { user } = useSelector((state) => state);
+  const loggedInUser = useSelector((state) => state.loggedInUser);
 
   function handleClose(event) {
     event.preventDefault();
@@ -55,7 +55,7 @@ function Blog({ blog }) {
       <div>{blog.user.name}</div>
       <div>
         <button onClick={handleClose}>Close</button>
-        {blog.user.username === user.username && (
+        {blog.user.username === loggedInUser.username && (
           <button onClick={handleDelete}>Delete</button>
         )}
       </div>

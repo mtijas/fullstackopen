@@ -1,12 +1,13 @@
 import { useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { createBlog } from "../reducers/blogReducer";
 
-export default function BlogForm({ user, blogFormRef }) {
+export default function BlogForm({ blogFormRef }) {
   const [title, setTitle] = useState("");
   const [author, setAuthor] = useState("");
   const [url, setUrl] = useState("");
   const dispatch = useDispatch();
+  const loggedInUser = useSelector((state) => state.loggedInUser);
 
   async function handleSubmit(event) {
     event.preventDefault();
@@ -19,7 +20,7 @@ export default function BlogForm({ user, blogFormRef }) {
     blogFormRef.current.toggleVisibility();
   }
 
-  if (user === null) {
+  if (loggedInUser === null) {
     return;
   }
 
