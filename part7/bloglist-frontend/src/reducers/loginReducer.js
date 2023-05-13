@@ -19,7 +19,7 @@ const userSlice = createSlice({
 export const { setLoggedInUser, emptyLoggedInUser } = userSlice.actions;
 export default userSlice.reducer;
 
-export function initializeUser() {
+export function initializeLoggedInUser() {
   return (dispatch) => {
     const loggedUserJSON = window.localStorage.getItem("loggedBlogappUser");
     if (loggedUserJSON) {

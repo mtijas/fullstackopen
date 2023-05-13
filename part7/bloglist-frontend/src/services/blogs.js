@@ -1,5 +1,7 @@
 import axios from "axios";
-const baseUrl = process.env.REACT_APP_BACKEND_BASEURL || "/api/blogs";
+const baseUrl = process.env.REACT_APP_BACKEND_BASEURL
+  ? `${process.env.REACT_APP_BACKEND_BASEURL}/api/blogs`
+  : "/api/blogs";
 
 let token = null;
 

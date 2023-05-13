@@ -1,13 +1,20 @@
-import { React, useState } from "react";
+import { React, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { deleteBlog, likeBlog } from "../reducers/blogReducer";
+import BlogForm from "./BlogForm";
+import Togglable from "./Togglable";
 
 function BlogList() {
+  const blogFormRef = useRef();
   const blogs = useSelector((state) => {
     return [...state.blogs].sort((a, b) => b.likes - a.likes);
   });
+
   return (
     <>
+      <Togglable buttonLabel="Add a new blog" ref={blogFormRef}>
+        <BlogForm blogFormRef={blogFormRef} />
+      </Togglable>
       {blogs.map((blog) => (
         <Blog key={blog.id} blog={blog} />
       ))}
