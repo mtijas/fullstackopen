@@ -82,7 +82,7 @@ export function likeBlog(blog) {
     try {
       const patchedBlog = { ...blog, likes: blog.likes + 1 };
       const result = await blogService.update(patchedBlog);
-      dispatch(patchBlog(result));
+      dispatch(patchBlog(patchedBlog));
       dispatch(
         setNotification(
           `Liked blog: ${result.title} by ${result.author}`,

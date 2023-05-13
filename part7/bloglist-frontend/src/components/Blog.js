@@ -1,8 +1,9 @@
-import { React, useRef, useState } from "react";
+import { React, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { deleteBlog, likeBlog } from "../reducers/blogReducer";
 import BlogForm from "./BlogForm";
 import Togglable from "./Togglable";
+import { Link, useParams } from "react-router-dom";
 
 function BlogList() {
   const blogFormRef = useRef();
@@ -15,26 +16,27 @@ function BlogList() {
       <Togglable buttonLabel="Add a new blog" ref={blogFormRef}>
         <BlogForm blogFormRef={blogFormRef} />
       </Togglable>
-      {blogs.map((blog) => (
-        <Blog key={blog.id} blog={blog} />
-      ))}
+      <ul>
+        {blogs.map((blog) => (
+          <li key={blog.id}>
+            <Link to={`/blogs/${blog.id}`}>{blog.title}</Link>
+          </li>
+        ))}
+      </ul>
     </>
   );
 }
 
-function Blog({ blog }) {
-  const [showDetails, setShowDetails] = useState(false);
+function Blog() {
   const dispatch = useDispatch();
   const loggedInUser = useSelector((state) => state.loggedInUser);
+  const blogs = useSelector((state) => state.blogs);
+  const id = useParams().id;
+  const filtered = blogs.filter((b) => b.id === id);
+  const blog = filtered[0];
 
-  function handleClose(event) {
-    event.preventDefault();
-    setShowDetails(false);
-  }
-
-  function handleOpen(event) {
-    event.preventDefault();
-    setShowDetails(true);
+  if (!blog) {
+    return <h2>Blog not found</h2>;
   }
 
   function handleLike(event) {
@@ -52,27 +54,25 @@ function Blog({ blog }) {
     dispatch(deleteBlog(blog.id));
   }
 
-  const details = (
-    <>
-      <div>{blog.url}</div>
-      <div>
+  return (
+    <article className="blog">
+      <h2>
+        {blog.title} | {blog.author}
+      </h2>
+      <p>
+        <a href={blog.url}>{blog.url}</a>
+      </p>
+
+      <p>
         Likes: {blog.likes}
         <button onClick={handleLike}>Like</button>
-      </div>
-      <div>{blog.user.name}</div>
+      </p>
+      <p>Added by {blog.user.name}</p>
       <div>
-        <button onClick={handleClose}>Close</button>
         {blog.user.username === loggedInUser.username && (
           <button onClick={handleDelete}>Delete</button>
         )}
       </div>
-    </>
-  );
-
-  return (
-    <article className="blog">
-      {blog.title} | {blog.author}
-      {showDetails ? details : <button onClick={handleOpen}>Details</button>}
     </article>
   );
 }
