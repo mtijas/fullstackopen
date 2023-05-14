@@ -95,3 +95,18 @@ export function likeBlog(blog) {
     }
   };
 }
+
+export function commentBlog(blog, comment) {
+  return async (dispatch) => {
+    try {
+      const newComment = await blogService.comment(blog.id, comment);
+      newComment.blog = blog;
+      dispatch(
+        patchBlog({ ...blog, comments: [...blog.comments, newComment] })
+      );
+      dispatch(setNotification("Comment added", "success", 5));
+    } catch (exception) {
+      dispatch(setNotification(exception.response.data.error, "error", 5));
+    }
+  };
+}

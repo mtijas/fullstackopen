@@ -1,6 +1,7 @@
 const blogsRouter = require("express").Router();
 const Blog = require("../models/blog");
 const User = require("../models/user");
+const Comment = require("../models/comment");
 const jwt = require("jsonwebtoken");
 
 blogsRouter.get("/", async (request, response) => {
@@ -69,6 +70,30 @@ blogsRouter.delete("/:id", async (request, response) => {
 
   await blogToDelete.delete();
   response.status(204).end();
+});
+
+blogsRouter.post("/:id/comments", async (request, response) => {
+  if (request.token === null) {
+    return response.status(401).json({ error: "token missing" });
+  }
+
+  const blog = await Blog.findById(request.params.id);
+  if (!blog) {
+    response.status(404).end();
+  }
+
+  const user = request.user;
+
+  const comment = new Comment({
+    content: request.body.content,
+    user: user._id,
+    blog: blog._id,
+  });
+  const savedComment = await comment.save();
+  blog.comments = blog.comments.concat(savedComment._id);
+  await blog.save();
+
+  response.status(201).json(savedComment);
 });
 
 module.exports = blogsRouter;

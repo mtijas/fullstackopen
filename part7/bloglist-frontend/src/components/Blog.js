@@ -2,6 +2,7 @@ import { React, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { deleteBlog, likeBlog } from "../reducers/blogReducer";
 import BlogForm from "./BlogForm";
+import CommentForm from "./CommentForm";
 import Togglable from "./Togglable";
 import { Link, useParams } from "react-router-dom";
 
@@ -54,6 +55,14 @@ function Blog() {
     dispatch(deleteBlog(blog.id));
   }
 
+  let comments = <li>No comments yet</li>;
+
+  if (blog.comments.length > 0) {
+    comments = blog.comments.map((comment) => (
+      <li key={comment.id}>{comment.content}</li>
+    ));
+  }
+
   return (
     <article className="blog">
       <h2>
@@ -73,6 +82,9 @@ function Blog() {
           <button onClick={handleDelete}>Delete</button>
         )}
       </div>
+      <h3>Comments</h3>
+      <CommentForm blog={blog} />
+      <ul>{comments}</ul>
     </article>
   );
 }

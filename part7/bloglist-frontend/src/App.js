@@ -7,7 +7,7 @@ import LoggedInUserInfo from "./components/LoggedInUserInfo";
 import { initializeBlogs } from "./reducers/blogReducer";
 import { initializeLoggedInUser } from "./reducers/loginReducer";
 import { initializeUsers } from "./reducers/usersReducer";
-import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Link, Navigate } from "react-router-dom";
 import UsersList, { UserInfo } from "./components/Users";
 
 const App = () => {
@@ -33,7 +33,10 @@ const App = () => {
 
       <Routes>
         <Route path="/" element={loggedInUser ? <BlogList /> : <LoginForm />} />
-        <Route path="/blogs/:id" element={<Blog />} />
+        <Route
+          path="/blogs/:id"
+          element={loggedInUser ? <Blog /> : <Navigate to="/" />}
+        />
         <Route path="/users" element={<UsersList />} />
         <Route path="/users/:id" element={<UserInfo />} />
       </Routes>

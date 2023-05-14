@@ -41,11 +41,24 @@ async function destroy(id) {
   await axios.delete(`${baseUrl}/${id}`, config);
 }
 
+async function comment(id, newObject) {
+  const config = {
+    headers: { Authorization: token },
+  };
+  const response = await axios.post(
+    `${baseUrl}/${id}/comments`,
+    newObject,
+    config
+  );
+  return response.data;
+}
+
 const blogService = {
   getAll,
   create,
   update,
   destroy,
+  comment,
   setToken,
 };
 
