@@ -3,12 +3,13 @@ import { useDispatch, useSelector } from "react-redux";
 import { BlogList, Blog } from "./components/Blog";
 import Notification from "./components/Notification";
 import LoginForm from "./components/LoginForm";
-import LoggedInUserInfo from "./components/LoggedInUserInfo";
+import MainNav from "./components/MainNav";
 import { initializeBlogs } from "./reducers/blogReducer";
 import { initializeLoggedInUser } from "./reducers/loginReducer";
 import { initializeUsers } from "./reducers/usersReducer";
-import { BrowserRouter, Routes, Route, Link, Navigate } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import UsersList, { UserInfo } from "./components/Users";
+import Container from "react-bootstrap/Container";
 
 const App = () => {
   const dispatch = useDispatch();
@@ -22,24 +23,24 @@ const App = () => {
 
   return (
     <BrowserRouter>
-      <div>
-        <Link to="/">Blogs</Link>
-        <Link to="/users">Users</Link>
-        <LoggedInUserInfo />
-      </div>
-      <h1>Blogs</h1>
+      <MainNav />
 
-      <Notification />
+      <Container id="mainContent">
+        <Notification />
 
-      <Routes>
-        <Route path="/" element={loggedInUser ? <BlogList /> : <LoginForm />} />
-        <Route
-          path="/blogs/:id"
-          element={loggedInUser ? <Blog /> : <Navigate to="/" />}
-        />
-        <Route path="/users" element={<UsersList />} />
-        <Route path="/users/:id" element={<UserInfo />} />
-      </Routes>
+        <Routes>
+          <Route
+            path="/"
+            element={loggedInUser ? <BlogList /> : <LoginForm />}
+          />
+          <Route
+            path="/blogs/:id"
+            element={loggedInUser ? <Blog /> : <Navigate to="/" />}
+          />
+          <Route path="/users" element={<UsersList />} />
+          <Route path="/users/:id" element={<UserInfo />} />
+        </Routes>
+      </Container>
     </BrowserRouter>
   );
 };

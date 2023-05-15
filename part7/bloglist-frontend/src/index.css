@@ -1,11 +1,5 @@
-h1 {
-  color: #dd7700;
-  font-style: italic;
-}
-
-button {
-  margin-left: 0.5rem;
-  margin-right: 0.5rem;
+#mainContent {
+  margin-top: 1rem;
 }
 
 .error,
@@ -22,10 +16,4 @@ button {
 .success {
   border: 4px solid #00ff55;
   background-color: #f0fff0;
-}
-
-article.blog {
-  margin: 1em 0.5em;
-  background-color: #eee;
-  padding: 0.5em;
 }

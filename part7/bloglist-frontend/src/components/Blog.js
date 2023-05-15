@@ -5,6 +5,7 @@ import BlogForm from "./BlogForm";
 import CommentForm from "./CommentForm";
 import Togglable from "./Togglable";
 import { Link, useParams } from "react-router-dom";
+import Button from "react-bootstrap/esm/Button";
 
 function BlogList() {
   const blogFormRef = useRef();
@@ -14,6 +15,7 @@ function BlogList() {
 
   return (
     <>
+      <h1>Blogs</h1>
       <Togglable buttonLabel="Add a new blog" ref={blogFormRef}>
         <BlogForm blogFormRef={blogFormRef} />
       </Togglable>
@@ -55,12 +57,13 @@ function Blog() {
     dispatch(deleteBlog(blog.id));
   }
 
-  let comments = <li>No comments yet</li>;
+  let comments = <p>No comments yet</p>;
 
   if (blog.comments.length > 0) {
-    comments = blog.comments.map((comment) => (
-      <li key={comment.id}>{comment.content}</li>
-    ));
+    console.log(blog.comments);
+    comments = blog.comments.map((comment) => {
+      return <li key={comment.id}>{comment.content}</li>;
+    });
   }
 
   return (
@@ -74,17 +77,19 @@ function Blog() {
 
       <p>
         Likes: {blog.likes}
-        <button onClick={handleLike}>Like</button>
+        <Button onClick={handleLike} variant="link">
+          Like
+        </Button>
       </p>
       <p>Added by {blog.user.name}</p>
       <div>
         {blog.user.username === loggedInUser.username && (
-          <button onClick={handleDelete}>Delete</button>
+          <Button onClick={handleDelete}>Delete</Button>
         )}
       </div>
       <h3>Comments</h3>
       <CommentForm blog={blog} />
-      <ul>{comments}</ul>
+      {blog.comments.length > 0 ? <ul>{comments}</ul> : <p>No comments yet.</p>}
     </article>
   );
 }

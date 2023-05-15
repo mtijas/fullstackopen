@@ -6,24 +6,27 @@ export default function UsersList() {
   const users = useSelector((state) => state.users);
 
   return (
-    <table>
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Blogs created</th>
-        </tr>
-      </thead>
-      <tbody>
-        {users.map((user) => (
-          <tr key={user.id}>
-            <td>
-              <Link to={`/users/${user.id}`}>{user.name}</Link>
-            </td>
-            <td>{user.blogs.length}</td>
+    <article>
+      <h1>Users</h1>
+      <table>
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Blogs created</th>
           </tr>
-        ))}
-      </tbody>
-    </table>
+        </thead>
+        <tbody>
+          {users.map((user) => (
+            <tr key={user.id}>
+              <td>
+                <Link to={`/users/${user.id}`}>{user.name}</Link>
+              </td>
+              <td>{user.blogs.length}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </article>
   );
 }
 
@@ -35,15 +38,15 @@ export function UserInfo() {
   if (user.length === 0) {
     return (
       <article>
-        <h2>User not found.</h2>
+        <p>User not found.</p>
       </article>
     );
   }
 
   return (
     <article>
-      <h2>{user[0].name}</h2>
-      <h3>Added blogs</h3>
+      <h1>{user[0].name}</h1>
+      <h2>Added blogs</h2>
       <ul>
         {user[0].blogs.map((blog) => (
           <li key={blog.id}>{blog.title}</li>
