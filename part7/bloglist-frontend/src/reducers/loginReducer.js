@@ -43,7 +43,7 @@ export function login(username, password) {
       blogService.setToken(user.token);
       dispatch(setLoggedInUser(user));
     } catch (exception) {
-      dispatch(setNotification(exception.response.data.error, "error", 5));
+      dispatch(setNotification(exception.response.data.error, "danger", 5));
     }
   };
 }

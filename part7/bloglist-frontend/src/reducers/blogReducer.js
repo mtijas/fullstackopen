@@ -37,7 +37,7 @@ export function initializeBlogs() {
       dispatch(
         setNotification(
           `Error getting initial data: '${exception}'`,
-          "error",
+          "danger",
           5
         )
       );
@@ -60,7 +60,7 @@ export function createBlog(content) {
         )
       );
     } catch (exception) {
-      dispatch(setNotification(exception.response.data.error, "error", 5));
+      dispatch(setNotification(exception.response.data.error, "danger", 5));
     }
   };
 }
@@ -72,7 +72,7 @@ export function deleteBlog(id) {
       dispatch(removeBlog(id));
       dispatch(setNotification("Blog deleted", "success", 5));
     } catch (exception) {
-      dispatch(setNotification(exception.response.data.error, "error", 5));
+      dispatch(setNotification(exception.response.data.error, "danger", 5));
     }
   };
 }
@@ -91,7 +91,7 @@ export function likeBlog(blog) {
         )
       );
     } catch (exception) {
-      dispatch(setNotification(exception.response.data.error, "error", 5));
+      dispatch(setNotification(exception.response.data.error, "danger", 5));
     }
   };
 }
@@ -106,7 +106,7 @@ export function commentBlog(blog, comment) {
       );
       dispatch(setNotification("Comment added", "success", 5));
     } catch (exception) {
-      dispatch(setNotification(exception.response.data.error, "error", 5));
+      dispatch(setNotification(exception.response.data.error, "danger", 5));
     }
   };
 }

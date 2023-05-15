@@ -28,7 +28,7 @@ export function initializeUsers() {
       dispatch(
         setNotification(
           `Error getting initial users data: '${exception}'`,
-          "error",
+          "danger",
           5
         )
       );
