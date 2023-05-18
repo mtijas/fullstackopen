@@ -1,0 +1,16 @@
+{
+  "name": "books",
+  "version": "0.0.1",
+  "description": "Books backend for FSO course part 8.",
+  "main": "index.js",
+  "scripts": {
+    "start": "node library-backend.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Markus Ijäs",
+  "license": "MIT",
+  "dependencies": {
+    "@apollo/server": "^4.7.1",
+    "graphql": "^16.6.0"
+  }
+}
